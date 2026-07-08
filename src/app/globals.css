@@ -1,0 +1,224 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+/* Dark ("black") theme — the studio's canonical mode */
+.theme-black,
+[data-theme="black"] {
+  --background: #000000;
+  --foreground: #f5f2ec;
+  --accent: #bf0a30;
+  --surface: #141414;
+  --muted: #4a4a4a;
+
+  /* Component-scoped tokens (not exposed as Tailwind utilities) */
+  --carousel-shade: #1f1f1f;
+  --manifesto-grid-line: rgba(255, 255, 255, 0.1);
+  --themed-select-shadow: rgba(0, 0, 0, 0.6);
+
+  /* Canvas / animated-background tokens — HeroBackdrop reads these so
+     the constellation swirl retunes for each theme automatically. */
+  --backdrop-fade: 0, 0, 0;                    /* RGB triplet, low-alpha fill drains toward black */
+  --backdrop-particle-hue: 350;                /* accent-red hue */
+  --backdrop-particle-sat-min: 28;
+  --backdrop-particle-sat-max: 36;
+  --backdrop-particle-lum-min: 68;
+  --backdrop-particle-lum-max: 82;
+  --backdrop-particle-alpha: 0.32;
+
+  /* Card interior texture — diagonal hairline pinstripes, one theme
+     per palette. Layered on top of --surface / --background as a
+     background-image, so the base solid colour still drives the card
+     hue and the pattern only adds depth. Kept at ~2.5–3.5% alpha so
+     the effect reads as tactile grain, not visible lines. */
+  --card-pinstripe: repeating-linear-gradient(
+    135deg,
+    transparent 0,
+    transparent 5px,
+    rgba(255, 255, 255, 0.028) 5px,
+    rgba(255, 255, 255, 0.028) 6px
+  );
+
+  color-scheme: dark;
+}
+
+/* Light theme — soft cream background, near-black text, accent stays
+   crimson so brand identity is stable across modes. */
+.theme-light,
+[data-theme="light"] {
+  --background: #f5f2ec;                       /* cream, matches dark-mode foreground */
+  --foreground: #0f0f10;                       /* near-black text — WCAG AAA against cream */
+  --accent: #bf0a30;                           /* same brand crimson */
+  --surface: #ffffff;                          /* pure white for chamfered card interiors */
+  --muted: #c9c2b3;                            /* warm muted for hairlines + secondary text */
+
+  --carousel-shade: #ede8de;
+  --manifesto-grid-line: rgba(0, 0, 0, 0.08);
+  --themed-select-shadow: rgba(0, 0, 0, 0.15);
+
+  --backdrop-fade: 245, 242, 236;              /* fill drains toward cream, not black */
+  --backdrop-particle-hue: 350;                /* same crimson family */
+  --backdrop-particle-sat-min: 40;             /* slightly higher sat for visibility on cream */
+  --backdrop-particle-sat-max: 55;
+  --backdrop-particle-lum-min: 42;             /* darker luminance — light bg needs low-lum particles */
+  --backdrop-particle-lum-max: 58;
+  --backdrop-particle-alpha: 0.28;
+
+  /* Same diagonal pinstripe, tuned darker for a cream base — subtle
+     black hairlines at ~3.5% alpha read like fine grain paper on the
+     card. Same angle + pitch as the dark theme for palette-wide
+     visual continuity. */
+  --card-pinstripe: repeating-linear-gradient(
+    135deg,
+    transparent 0,
+    transparent 5px,
+    rgba(0, 0, 0, 0.035) 5px,
+    rgba(0, 0, 0, 0.035) 6px
+  );
+
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-anton-sc);
+}
+
+html,
+body {
+  overflow-x: clip;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Display face for all real headings. Wrapped in @layer base so it
+   participates in the same cascade slot as Tailwind's preflight — a
+   plain rule outside a layer is overridden by preflight's later
+   inheritance reset on headings. */
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display), var(--font-sans), Arial, Helvetica, sans-serif;
+  }
+}
+
+/* Hide native cursor when custom cursor is active (desktop w/ hover only). */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  html.cursor-none-root,
+  html.cursor-none-root * {
+    cursor: none !important;
+  }
+}
+
+/* Utility: hide horizontal scrollbar on the top-bar overflow row. */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Chamfered-corner utility — single visual language for all rectangular
+   elements (cards, buttons, inputs, containers, badges, image frames…).
+
+   Usage:
+     <div class="chamfer">…</div>                       default 10px chamfer, hairline muted border, transparent fill
+     <div class="chamfer chamfer-sm">…</div>            6px chamfer
+     <div class="chamfer chamfer-lg">…</div>            14px chamfer
+     <div class="chamfer" style="--chamfer-border-color: var(--accent); --chamfer-bg: var(--surface)">…</div>
+
+   How it works:
+     The element is clipped to an 8-point polygon (rectangle with 45°
+     corner cuts). Its own background paints the border color. A ::before
+     pseudo-element, inset by --chamfer-border and clipped to the same
+     shape, paints the interior fill. This yields a hairline border that
+     traces the chamfer continuously — including the diagonal segment.
+
+     Wrapped in `@layer components` so Tailwind utilities (loaded in
+     `@layer utilities`) win — that lets callers add `absolute`, `fixed`,
+     etc. without fighting `.chamfer`'s default `position: relative`. */
+@layer components {
+  .chamfer {
+    --chamfer-size: 10px;
+    --chamfer-border: 1px;
+    --chamfer-border-color: color-mix(in srgb, var(--muted) 60%, transparent);
+    --chamfer-bg: transparent;
+
+    position: relative;
+    isolation: isolate;
+    background-color: var(--chamfer-border-color);
+    clip-path: polygon(
+      var(--chamfer-size) 0,
+      calc(100% - var(--chamfer-size)) 0,
+      100% var(--chamfer-size),
+      100% calc(100% - var(--chamfer-size)),
+      calc(100% - var(--chamfer-size)) 100%,
+      var(--chamfer-size) 100%,
+      0 calc(100% - var(--chamfer-size)),
+      0 var(--chamfer-size)
+    );
+  }
+
+  .chamfer::before {
+    content: "";
+    position: absolute;
+    inset: var(--chamfer-border);
+    background: var(--chamfer-bg);
+    clip-path: polygon(
+      var(--chamfer-size) 0,
+      calc(100% - var(--chamfer-size)) 0,
+      100% var(--chamfer-size),
+      100% calc(100% - var(--chamfer-size)),
+      calc(100% - var(--chamfer-size)) 100%,
+      var(--chamfer-size) 100%,
+      0 calc(100% - var(--chamfer-size)),
+      0 var(--chamfer-size)
+    );
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .chamfer-xs { --chamfer-size: 4px; }
+  .chamfer-sm { --chamfer-size: 6px; }
+  .chamfer-md { --chamfer-size: 10px; }
+  .chamfer-lg { --chamfer-size: 14px; }
+  .chamfer-xl { --chamfer-size: 20px; }
+
+  /* Bare chamfer without the ::before fill — for elements that supply
+     their own background/content and only need the corner cut. */
+  .chamfer-shape {
+    clip-path: polygon(
+      var(--chamfer-size, 10px) 0,
+      calc(100% - var(--chamfer-size, 10px)) 0,
+      100% var(--chamfer-size, 10px),
+      100% calc(100% - var(--chamfer-size, 10px)),
+      calc(100% - var(--chamfer-size, 10px)) 100%,
+      var(--chamfer-size, 10px) 100%,
+      0 calc(100% - var(--chamfer-size, 10px)),
+      0 var(--chamfer-size, 10px)
+    );
+  }
+
+}
+
+
