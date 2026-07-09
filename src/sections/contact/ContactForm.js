@@ -7,13 +7,84 @@ import { useSectionReveal } from "@/hooks/useSectionReveal";
 import { useScrubReveal } from "@/hooks/useScrubReveal";
 
 const FIELDS = [
-  { name: "name", label: "Name", type: "text", placeholder: "Your full name" },
-  { name: "email", label: "Email", type: "email", placeholder: "you@company.com" },
-  { name: "company", label: "Company", type: "text", placeholder: "Where you work" },
-  { name: "budget", label: "Budget", type: "text", placeholder: "$50k – $250k+" },
+  {
+    name: "name",
+    label: "Full Name",
+    type: "text",
+    placeholder: "Enter your full name",
+    required: true,
+    autoComplete: "name",
+  },
+  {
+    name: "email",
+    label: "Email Address",
+    type: "email",
+    placeholder: "Enter your email address",
+    required: true,
+    autoComplete: "email",
+  },
+  {
+    name: "phone",
+    label: "Phone Number",
+    type: "tel",
+    placeholder: "Enter your phone number",
+    autoComplete: "tel",
+  },
+  {
+    name: "business",
+    label: "Business / Organization Name",
+    type: "text",
+    placeholder: "Enter your business name",
+    autoComplete: "organization",
+  },
+  {
+    name: "website",
+    label: "Current Website URL",
+    type: "url",
+    placeholder: "Enter your current website, if you have one",
+    autoComplete: "url",
+  },
 ];
 
-const ENGAGEMENT_OPTIONS = ["Sprint", "Retainer", "Systems", "Not sure yet"];
+const SELECT_FIELDS = [
+  {
+    name: "help",
+    label: "What Do You Need Help With?",
+    required: true,
+    options: [
+      "New business website",
+      "Website redesign",
+      "Lead generation page",
+      "Brand messaging",
+      "SEO foundation",
+      "Website strategy",
+      "Ongoing website support",
+      "Not sure yet",
+      "Other",
+    ],
+  },
+  {
+    name: "budget",
+    label: "Budget Range",
+    required: true,
+    options: [
+      "Starter website plan",
+      "Growth website plan",
+      "Custom / Not sure",
+    ],
+  },
+  {
+    name: "timeline",
+    label: "Timeline",
+    required: true,
+    options: [
+      "As soon as possible",
+      "Within 30 days",
+      "Within 60 days",
+      "No fixed timeline yet",
+    ],
+  },
+];
 
 export default function ContactForm() {
   const revealRef = useSectionReveal();
@@ -79,48 +150,26 @@ export default function ContactForm() {
             {FIELDS.map((f) => (
               <Field key={f.name} {...f} />
             ))}
+            {SELECT_FIELDS.map((f) => (
+              <SelectField key={f.name} {...f} />
+            ))}
           </div>
 
           <label className="flex flex-col gap-3">
             <MaskedLine className="text-[10px] uppercase tracking-[0.28em] text-foreground/50">
-              Engagement type
-            </MaskedLine>
-            <div className="flex flex-wrap gap-3">
-              {ENGAGEMENT_OPTIONS.map((opt) => (
-                <label
-                  key={opt}
-                  className="chamfer chamfer-xs cursor-pointer px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-foreground/70 has-[:checked]:text-accent"
-                  style={{
-                    "--chamfer-border-color":
-                      "color-mix(in srgb, var(--muted) 50%, transparent)",
-                    "--chamfer-bg": "var(--background)",
-                  }}
-                >
-                  <input
-                    type="radio"
-                    name="engagement"
-                    value={opt}
-                    className="peer sr-only"
-                  />
-                  <span className="relative z-10">{opt}</span>
-                </label>
-              ))}
-            </div>
-          </label>
-
-          <label className="flex flex-col gap-3">
-            <MaskedLine className="text-[10px] uppercase tracking-[0.28em] text-foreground/50">
-              What are you working on?
+              Message
             </MaskedLine>
             <textarea
+              name="message"
               rows={5}
-              placeholder="A sentence or two is plenty."
+              required
+              placeholder="Tell us what you are working on and what you need help with."
               className="w-full resize-none border-b border-muted/60 bg-transparent py-3 text-sm text-foreground caret-accent outline-none transition-colors placeholder:text-foreground/30 focus:border-accent"
             />
           </label>
 
           <CTAButton type="submit" variant="solid" size="lg" className="mt-2">
-            Send brief
+            Send message
           </CTAButton>
         </form>
       </div>
@@ -128,7 +177,7 @@ export default function ContactForm() {
   );
 }
 
-function Field({ name, label, type, placeholder }) {
+function Field({ name, label, type, placeholder, required, autoComplete }) {
   return (
     <label className="flex flex-col gap-3">
       <MaskedLine className="text-[10px] uppercase tracking-[0.28em] text-foreground/50">
@@ -138,8 +187,45 @@ function Field({ name, label, type, placeholder }) {
         name={name}
         type={type}
         placeholder={placeholder}
+        required={required}
+        autoComplete={autoComplete}
         className="w-full border-b border-muted/60 bg-transparent py-3 text-sm text-foreground caret-accent outline-none transition-colors placeholder:text-foreground/30 focus:border-accent"
       />
+    </label>
+  );
+}
+
+function SelectField({ name, label, options, required }) {
+  return (
+    <label className="flex flex-col gap-3">
+      <MaskedLine className="text-[10px] uppercase tracking-[0.28em] text-foreground/50">
+        {label}
+      </MaskedLine>
+      <div className="relative">
+        <select
+          name={name}
+          required={required}
+          defaultValue=""
+          className="peer w-full appearance-none border-b border-muted/60 bg-transparent py-3 pr-8 text-sm text-foreground caret-accent outline-none transition-colors invalid:text-foreground/30 focus:border-accent"
+        >
+          <option value="" disabled>
+            Select an option
+          </option>
+          {options.map((opt) => (
+            <option key={opt} value={opt} className="bg-background text-foreground">
+              {opt}
+            </option>
+          ))}
+        </select>
+        <span
+          aria-hidden
+          className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 text-foreground/40 transition-colors peer-focus:text-accent"
+        >
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
+            <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.2" />
+          </svg>
+        </span>
+      </div>
     </label>
   );
 }

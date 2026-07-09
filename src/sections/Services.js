@@ -11,11 +11,11 @@ import { useStaggeredGrid } from "@/hooks/useStaggeredGrid";
 
 const SERVICES = [
   {
-    slug: "product-design",
+    slug: "business-website-design",
     n: "01",
-    title: "Product design",
+    title: "Business Website Design",
     body:
-      "Positioning, information architecture, and interface systems for products that need to feel inevitable.",
+      "Professional websites that make your business look credible, clear, and easy to choose.",
     Icon: (props) => (
       <svg viewBox="0 0 40 40" fill="none" {...props}>
         <rect x="4" y="4" width="32" height="32" stroke="currentColor" />
@@ -25,11 +25,11 @@ const SERVICES = [
     ),
   },
   {
-    slug: "brand-identity",
+    slug: "conversion-focused-copy",
     n: "02",
-    title: "Brand & identity",
+    title: "Conversion-Focused Copy",
     body:
-      "Verbal and visual systems—from wordmarks to editorial motion—built to hold up across every surface.",
+      "Website copy that explains your value and moves visitors toward action across every page.",
     Icon: (props) => (
       <svg viewBox="0 0 40 40" fill="none" {...props}>
         <circle cx="20" cy="20" r="16" stroke="currentColor" />
@@ -39,11 +39,11 @@ const SERVICES = [
     ),
   },
   {
-    slug: "engineering",
+    slug: "website-development",
     n: "03",
-    title: "Engineering",
+    title: "Website Development",
     body:
-      "Modern React, Next.js, and design-engineering. We ship the interfaces we design—no handoff friction.",
+      "Responsive, functional websites that work across desktop, tablet, and mobile — built to be found and used.",
     Icon: (props) => (
       <svg viewBox="0 0 40 40" fill="none" {...props}>
         <path d="M14 12L6 20l8 8" stroke="currentColor" />
@@ -53,11 +53,11 @@ const SERVICES = [
     ),
   },
   {
-    slug: "motion-storytelling",
+    slug: "lead-generation-pages",
     n: "04",
-    title: "Motion & storytelling",
+    title: "Lead Generation Pages",
     body:
-      "Scroll-crafted narratives, product tours, and launch films that turn attention into conviction.",
+      "Focused pages designed for quote requests, bookings, inquiries, campaigns, and sales conversations.",
     Icon: (props) => (
       <svg viewBox="0 0 40 40" fill="none" {...props}>
         <rect x="4" y="8" width="32" height="24" stroke="currentColor" />

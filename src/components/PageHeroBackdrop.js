@@ -106,6 +106,14 @@ export default function PageHeroBackdrop({ variant = "beams" }) {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) return;
 
+    // Below tablet, skip the beams / scan / streak / ring GSAP loops
+    // entirely — each variant runs 4–12 concurrent infinite tweens with
+    // drop-shadow filters that recompute on every scroll frame. The
+    // static ambient radial-gradient tint below still paints, so the
+    // hero keeps its per-page colour hint without the animation cost.
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    if (isMobile) return;
+
     const ctx = gsap.context(() => {
       // Beams — each sweeps from off-screen-left through off-screen-right,
       // fading in over the first 12% of its life and out over the last 20%.
@@ -222,12 +230,22 @@ export default function PageHeroBackdrop({ variant = "beams" }) {
       }}
     >
       {/* Ambient tint — a fixed low-opacity crimson wash so the hero always
-          reads as "on brand" even before any animated layer catches the eye. */}
+          reads as "on brand" even before any animated layer catches the eye.
+          Painted at every viewport size; the animated FX layers below are
+          `hidden md:block` so mobile pays no filter cost. */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{ backgroundImage: config.ambient }}
       />
 
+      {/*
+        Every animated FX layer (grid drift, beams, scans, streaks, rings)
+        is wrapped in one `hidden md:block` container. Under 768 px the
+        DOM never mounts them, so there's zero drop-shadow / blur cost and
+        zero GSAP tween cost even before the useEffect's mobile bail-out
+        kicks in. Above md the wrapper is transparent — no visual change.
+      */}
+      <div className="pointer-events-none absolute inset-0 hidden md:block">
       {/* Subtle tech grid — only on scan variant. Pinstriped feel, drifts
           slowly via GSAP so the grid pulses instead of sitting flat. */}
       {config.grid && (
@@ -336,6 +354,7 @@ export default function PageHeroBackdrop({ variant = "beams" }) {
             }}
           />
         ))}
+      </div>
 
       {/* Chamfered vignette — soft radial dark edges keep body text
           contrast high even where the backdrop is brightest. */}

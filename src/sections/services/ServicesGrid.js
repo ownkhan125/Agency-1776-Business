@@ -26,11 +26,11 @@ export default function ServicesGrid() {
               data-reveal="icon"
               className="inline-block h-1.5 w-1.5 bg-accent"
             />
-            The four / 02
+            The service system / 02
           </span>
         </MaskedLine>
         <MaskedLine className="max-w-md text-sm leading-relaxed text-foreground/60">
-          Each discipline has its own page — deliverables, process, engagement window.
+          Strategy, messaging, design, development, lead capture, and search-ready structure — the full website build process, covered.
         </MaskedLine>
       </div>
 

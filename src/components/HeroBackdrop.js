@@ -92,6 +92,28 @@ export default function HeroBackdrop() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Skip the whole grid-attractor particle simulation below tablet.
+    // The physics loop + canvas fills are the single biggest per-frame
+    // cost on the home page, and the swirl is far too subtle at
+    // phone-scale to justify. Static one-shot fill covers the canvas
+    // in the theme's background colour so the Hero still reads as a
+    // solid block.
+    const isMobile =
+      window.matchMedia("(max-width: 767px)").matches;
+    if (isMobile) {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const rgb = getComputedStyle(document.documentElement)
+        .getPropertyValue("--backdrop-fade")
+        .trim() || "0, 0, 0";
+      ctx.fillStyle = `rgb(${rgb})`;
+      ctx.fillRect(0, 0, rect.width, rect.height);
+      return;
+    }
+
     const reduced =
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 

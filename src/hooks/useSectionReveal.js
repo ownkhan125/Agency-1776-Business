@@ -48,7 +48,12 @@ export function useSectionReveal({
 
     const ctx = gsap.context(() => {
       const particles = scope.querySelectorAll("[data-reveal='particle']");
-      const border = scope.querySelector("[data-reveal='border']");
+      // Two border variants live side-by-side in SectionShell (the
+      // desktop chamfered polygon and the mobile top+bottom lines) —
+      // only one is visible per viewport via a CSS media-query class,
+      // but both need the reveal timeline applied so scroll-in works
+      // correctly on either.
+      const borders = scope.querySelectorAll("[data-reveal='border']");
       const icons = scope.querySelectorAll("[data-reveal='icon']");
       const lines = scope.querySelectorAll("[data-reveal='text-line']");
 
@@ -68,9 +73,12 @@ export function useSectionReveal({
       // decay back to the current theme's muted colour on completion
       // and end up matching the SVG attribute state again.
       let borderRestingStroke = null;
-      if (border) {
-        borderRestingStroke = getComputedStyle(border).stroke;
-        gsap.set(border, {
+      if (borders.length) {
+        // Read the resting stroke off the first border — both variants
+        // share the same `stroke` attribute passed into SectionShell,
+        // so one sample is enough for the decay-back colour.
+        borderRestingStroke = getComputedStyle(borders[0]).stroke;
+        gsap.set(borders, {
           strokeDashoffset: 1,
           stroke: "#bf0a30",
           strokeWidth: 1,
@@ -152,30 +160,14 @@ export function useSectionReveal({
         );
       }
 
-      if (border) {
+      if (borders.length) {
         // Border build — three-phase premium reveal, all on the shared
-        // timeline (single ScrollTrigger, no duplicates):
-        //
-        //   1. DRAW    — stroke starts crimson (#bf0a30) with a soft
-        //                drop-shadow halo; strokeDashoffset animates
-        //                1 → 0 so the accent stroke traces the entire
-        //                chamfered polygon perimeter.
-        //   2. PULSE   — the moment the outline completes, the halo
-        //                briefly intensifies (drop-shadow 3px → 6px
-        //                and alpha 0.28 → 0.45), reading as a single
-        //                subtle heartbeat rather than a flashy flare.
-        //   3. DECAY   — the stroke colour fades to the resting muted
-        //                colour and the halo dissolves to zero over
-        //                ~0.55 s. onComplete clears the inline stroke/
-        //                filter overrides so future theme swaps keep
-        //                propagating through the SVG `stroke="var(--
-        //                muted)"` attribute.
-        //
-        // Border finishes ~1 s after the section touches the viewport
-        // bottom — decoratively behind the ~0.35 s text arrival, so
-        // the user is already reading when the halo dissolves.
+        // timeline. Both the desktop chamfered polygon and the mobile
+        // top+bottom lines get the same DRAW → PULSE → DECAY treatment,
+        // so whichever variant is visible for the current viewport gets
+        // the identical reveal.
         tl.to(
-          border,
+          borders,
           {
             strokeDashoffset: 0,
             duration: DURATION.border,
@@ -184,7 +176,7 @@ export function useSectionReveal({
           0.1
         );
         tl.to(
-          border,
+          borders,
           {
             filter: "drop-shadow(0 0 6px rgba(191, 10, 48, 0.45))",
             duration: 0.18,
@@ -193,17 +185,19 @@ export function useSectionReveal({
           `>-0.05`
         );
         tl.to(
-          border,
+          borders,
           {
             stroke: borderRestingStroke || "#4a4a4a",
             filter: "drop-shadow(0 0 0px rgba(191, 10, 48, 0))",
             duration: 0.55,
             ease: "power2.out",
             onComplete: () => {
-              // Hand the polygon back to the SVG attribute + CSS
+              // Hand the borders back to the SVG attribute + CSS
               // variable pipeline so theme changes propagate.
-              border.style.removeProperty("stroke");
-              border.style.removeProperty("filter");
+              for (let i = 0; i < borders.length; i++) {
+                borders[i].style.removeProperty("stroke");
+                borders[i].style.removeProperty("filter");
+              }
             },
           },
           `>-0.05`

@@ -48,6 +48,9 @@ const SectionShell = forwardRef(function SectionShell(
   const borderBoxRef = useRef(null);
   const polygonRef = useRef(null);
 
+  const topLineRef = useRef(null);
+  const bottomLineRef = useRef(null);
+
   useLayoutEffect(() => {
     if (!showBorder) return;
     const box = borderBoxRef.current;
@@ -73,6 +76,25 @@ const SectionShell = forwardRef(function SectionShell(
         .map((p) => p.join(","))
         .join(" ");
       poly.setAttribute("points", points);
+
+      // Below-tablet top + bottom lines share the same coordinate space
+      // as the polygon. We inset the horizontal ends by SECTION_CHAMFER
+      // so the lines still visually align with the chamfered inset the
+      // desktop border uses, keeping the studio's angular language.
+      const topLine = topLineRef.current;
+      const bottomLine = bottomLineRef.current;
+      if (topLine) {
+        topLine.setAttribute("x1", String(c));
+        topLine.setAttribute("y1", "0");
+        topLine.setAttribute("x2", String(w - c));
+        topLine.setAttribute("y2", "0");
+      }
+      if (bottomLine) {
+        bottomLine.setAttribute("x1", String(c));
+        bottomLine.setAttribute("y1", String(h));
+        bottomLine.setAttribute("x2", String(w - c));
+        bottomLine.setAttribute("y2", String(h));
+      }
     };
     update();
 
@@ -148,6 +170,14 @@ const SectionShell = forwardRef(function SectionShell(
             preserveAspectRatio="none"
             className="block overflow-visible"
           >
+            {/*
+              Desktop / tablet — full chamfered 8-point polygon outline.
+              Hidden on <md; the top + bottom lines below take over there.
+              Both variants share `data-reveal="border"` so useSectionReveal
+              applies its stroke-in + accent-halo + decay to whichever is
+              actually visible (querySelectorAll iterates both, the CSS-
+              hidden one gets a no-op paint).
+            */}
             <polygon
               ref={polygonRef}
               data-reveal="border"
@@ -156,6 +186,46 @@ const SectionShell = forwardRef(function SectionShell(
               stroke={borderColor}
               strokeWidth="1"
               pathLength="1"
+              className="hidden md:block"
+              style={{
+                strokeDasharray: 1,
+                strokeDashoffset: 1,
+                willChange: "stroke-dashoffset",
+              }}
+              vectorEffect="non-scaling-stroke"
+            />
+            {/*
+              Below tablet — TOP + BOTTOM horizontal lines only. Kept
+              inset by SECTION_CHAMFER on each end so they visually echo
+              the chamfered corner language without drawing left/right
+              edges. Both lines get the same stroke-in reveal as the
+              polygon variant.
+            */}
+            <line
+              ref={topLineRef}
+              data-reveal="border"
+              x1="0" y1="0" x2="0" y2="0"
+              fill="none"
+              stroke={borderColor}
+              strokeWidth="1"
+              pathLength="1"
+              className="block md:hidden"
+              style={{
+                strokeDasharray: 1,
+                strokeDashoffset: 1,
+                willChange: "stroke-dashoffset",
+              }}
+              vectorEffect="non-scaling-stroke"
+            />
+            <line
+              ref={bottomLineRef}
+              data-reveal="border"
+              x1="0" y1="0" x2="0" y2="0"
+              fill="none"
+              stroke={borderColor}
+              strokeWidth="1"
+              pathLength="1"
+              className="block md:hidden"
               style={{
                 strokeDasharray: 1,
                 strokeDashoffset: 1,

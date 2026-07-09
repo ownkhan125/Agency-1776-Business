@@ -8,24 +8,24 @@ import { useSectionReveal } from "@/hooks/useSectionReveal";
 
 const FAQ = [
   {
-    q: "How many engagements do you take at once?",
-    a: "One or two. That is the largest number we can sustain while committing senior time to every day of every project. It is also why lead times are 60 – 120 days.",
+    q: "What is a Full Website Build?",
+    a: "The complete system. We map your strategy, write the copy, design the pages, develop across desktop, tablet, and mobile, and launch with your CTAs, forms, and SEO foundation in place. Right for businesses starting fresh or replacing a site that no longer represents them.",
   },
   {
-    q: "Do you subcontract or offshore?",
-    a: "No. Every deliverable that ships to a client is drawn or written by a full-time employee of the studio. Five people, all senior, all in one Slack.",
+    q: "What is a Website Redesign?",
+    a: "For businesses whose current site looks dated, converts poorly, or no longer reflects the business. We rebuild the visual layer, sharpen the message, and update the structure — without starting from zero.",
   },
   {
-    q: "Do you sign design contracts without engineering?",
-    a: "Rarely. Product design and engineering share one timeline; separating them is the shortest path to a beautiful mock that never ships. If you have engineering in-house we adapt — otherwise both come as one line item.",
+    q: "What is a Landing Page Build?",
+    a: "A single focused page designed for quote requests, bookings, inquiries, campaigns, or sales conversations. Built to convert one visitor at a time, wherever your traffic is coming from.",
   },
   {
-    q: "Do you retain a percentage of a company?",
-    a: "Occasionally, for pre-seed and seed engagements where cash is genuinely tight. We take equity in place of a fee-cut, not on top of one, and only when the founders raise it first.",
+    q: "What is a Copy and Messaging Upgrade?",
+    a: "Sometimes the design is fine but the words are not selling. We rewrite the copy across your key pages so your value is clear and your visitor knows exactly what to do next.",
   },
   {
-    q: "What is your rate?",
-    a: "Fees start at $18k for a two-week Sprint and $28k / month for the Retainer. The Systems engagement runs $85k – $180k depending on scope. All numbers ex-tax and travel.",
+    q: "What is an SEO Foundation Setup?",
+    a: "Structural search-visibility work — headings, metadata, page flow, and content hierarchy — so search engines can read and rank your business fairly. The foundation that ongoing SEO work builds on.",
   },
 ];
 
@@ -47,11 +47,11 @@ export default function ServicesFAQ() {
               data-reveal="icon"
               className="inline-block h-1.5 w-1.5 bg-accent"
             />
-            FAQ / 04
+            Service paths / 04
           </span>
         </MaskedLine>
         <MaskedLine className="max-w-md text-sm leading-relaxed text-foreground/60">
-          Five answers we give on every intro call.
+          Fix one piece, or rebuild the whole system — the paths businesses choose most.
         </MaskedLine>
       </div>
 

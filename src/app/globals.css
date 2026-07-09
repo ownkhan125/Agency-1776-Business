@@ -221,4 +221,120 @@ body {
 
 }
 
+/* Solar-system orbit animations — used exclusively by <SolarSystem />.
+   Kept in globals.css so keyframes are defined once at the sheet level
+   (they can't be defined inside a component scope) and are shared across
+   every orbiting node. All motion is pure CSS: transform-only, GPU
+   composited, and independent of GSAP/ScrollTrigger — the section-reveal
+   timeline never touches these classes. Cards face the camera because
+   each planet has TWO nested rotators: the outer element runs
+   `orbit-move` (rotateZ + translateX = circle path) and the inner card
+   runs `orbit-billboard-cancel` (equal-and-opposite rotateZ) so the card
+   appears to sit still while its orbit slot rotates around the sun. */
+
+@keyframes solar-orbit-move {
+  0% {
+    transform: translate(-50%, -50%) rotateZ(0deg) translateX(var(--orbit-radius, 175px));
+  }
+  100% {
+    transform: translate(-50%, -50%) rotateZ(-360deg) translateX(var(--orbit-radius, 175px));
+  }
+}
+
+@keyframes solar-orbit-billboard {
+  0% {
+    transform: translate(-50%, -50%) rotateZ(0deg) rotateY(10deg) rotateX(-65deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotateZ(360deg) rotateY(10deg) rotateX(-65deg);
+  }
+}
+
+@keyframes solar-sun-pulse {
+  0%   { transform: scale(0.94); opacity: 0.7; }
+  100% { transform: scale(1.08); opacity: 1;   }
+}
+
+@keyframes solar-spin-cw {
+  0%   { transform: rotateX(65deg) rotateY(-10deg) rotateZ(0deg); }
+  100% { transform: rotateX(65deg) rotateY(-10deg) rotateZ(360deg); }
+}
+
+@keyframes solar-spin-ccw {
+  0%   { transform: rotateX(65deg) rotateY(-10deg) rotateZ(0deg); }
+  100% { transform: rotateX(65deg) rotateY(-10deg) rotateZ(-360deg); }
+}
+
+.solar-orbit {
+  animation: solar-orbit-move var(--orbit-duration, 24s) linear infinite;
+}
+
+.solar-billboard {
+  animation: solar-orbit-billboard var(--orbit-duration, 24s) linear infinite;
+}
+
+.solar-sun-pulse   { animation: solar-sun-pulse 4s ease-in-out infinite alternate; }
+.solar-spin-cw     { animation: solar-spin-cw 22s linear infinite; }
+.solar-spin-ccw    { animation: solar-spin-ccw 34s linear infinite; }
+
+/* Motion gate — respect user setting. Freezes every orbit at its initial
+   frame; layout stays intact so the visualisation is still legible as a
+   static isometric snapshot. */
+@media (prefers-reduced-motion: reduce) {
+  .solar-orbit,
+  .solar-billboard,
+  .solar-sun-pulse,
+  .solar-spin-cw,
+  .solar-spin-ccw {
+    animation: none !important;
+  }
+}
+
+/* ValueGrid card glyph idle animations — pure CSS loops so the quartet
+   of playbook glyphs feels alive without touching the GSAP timeline or
+   introducing extra ScrollTriggers. Each keyframe drives a single
+   highlight element inside its glyph (center dot pulse, check trace,
+   corner blink, arrow rise). */
+@keyframes glyph-pulse {
+  0%, 100% { transform: scale(1);    opacity: 1; }
+  50%      { transform: scale(1.55); opacity: 0.55; }
+}
+@keyframes glyph-trace {
+  0%       { stroke-dashoffset: 1; }
+  50%,
+  100%     { stroke-dashoffset: 0; }
+}
+@keyframes glyph-blink {
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 1; }
+}
+@keyframes glyph-rise {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(0, -2px, 0); }
+}
+.glyph-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: glyph-pulse 2.4s ease-in-out infinite;
+}
+.glyph-trace {
+  stroke-dasharray: 1;
+  animation: glyph-trace 3.4s ease-in-out infinite;
+}
+.glyph-blink { animation: glyph-blink 2.2s ease-in-out infinite; }
+.glyph-rise  {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: glyph-rise 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glyph-pulse,
+  .glyph-trace,
+  .glyph-blink,
+  .glyph-rise {
+    animation: none !important;
+  }
+}
+
 

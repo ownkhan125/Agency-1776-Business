@@ -7,7 +7,7 @@ import ServicesFAQ from "@/sections/services/ServicesFAQ";
 export const metadata = {
   title: "Services · Agency 1776 Business",
   description:
-    "Product design, brand, engineering, and motion — four disciplines, one senior team.",
+    "Website strategy, design, development, copy, lead generation, and SEO — a focused set of services built for business growth.",
 };
 
 export default function ServicesPage() {
@@ -18,13 +18,13 @@ export default function ServicesPage() {
         index="004"
         backdrop="scan"
         heading={{
-          lead: "Four disciplines,",
-          tail: "one senior team.",
-          accent: "No handoff friction.",
+          lead: "Services for your",
+          tail: "business",
+          accent: "growth.",
         }}
         description={[
-          "We commit senior time to every day of every engagement.",
-          "That is how the work gets deep enough to move a metric.",
+          "Agency 1776 gives business owners the pieces they need to build a stronger website from the ground up.",
+          "A focused set of website services built to make your business clearer, more credible, and easier to contact.",
         ]}
       >
         <CTAButton href="/contact" size="lg">

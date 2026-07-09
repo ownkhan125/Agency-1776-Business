@@ -87,28 +87,28 @@ export default function Hero() {
       */}
       <div className="flex flex-1 flex-col justify-center gap-10 md:gap-12">
         <div ref={scrubRef} className="max-w-[70rem]">
-          <h1 className="font-display text-[clamp(2.75rem,8.5vw,7.5rem)] leading-[0.92] tracking-[-0.02em] text-foreground [word-break:normal]">
+          <h1 className="font-display text-[clamp(2.5rem,7.5vw,6.75rem)] leading-[0.95] tracking-[-0.02em] text-foreground [word-break:normal]">
             <span className="block">
-              <ScrubText>Serious craft</ScrubText>
+              <ScrubText>Building Websites</ScrubText>
             </span>
             <span className="block text-foreground/70">
-              <ScrubText>for teams that measure</ScrubText>
+              <ScrubText>That Bring Businesses</ScrubText>
             </span>
             <span className="block">
               <StencilFill immediate className="text-accent">
-                outcomes.
+                More Leads.
               </StencilFill>
             </span>
           </h1>
         </div>
 
         <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
-        <p className="max-w-md text-sm leading-relaxed text-foreground/70">
-          <MaskedLine block>We partner with founders and operators</MaskedLine>
+        <p className="max-w-lg text-sm leading-relaxed text-foreground/70">
+          <MaskedLine block>Agency 1776 builds business websites for owners</MaskedLine>
           <MaskedLine block>
-            to design, ship, and refine the interfaces
+            who want to build trust, explain offers clearly,
           </MaskedLine>
-          <MaskedLine block>their businesses grow on.</MaskedLine>
+          <MaskedLine block>and turn visitors into leads.</MaskedLine>
         </p>
 
         <div className="flex flex-wrap items-center gap-4">
@@ -126,7 +126,7 @@ export default function Hero() {
                 data-cursor="link"
                 className="inline-flex items-center gap-4 px-2 py-4 text-xs uppercase tracking-[0.24em] text-foreground"
               >
-                Selected work
+                Explore our portfolio
                 <span className="inline-block h-px w-6 bg-foreground" />
               </MotionLink>
             );

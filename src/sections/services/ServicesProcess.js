@@ -8,10 +8,12 @@ import { useSectionReveal } from "@/hooks/useSectionReveal";
 import { useScrubReveal } from "@/hooks/useScrubReveal";
 
 const PROCESS = [
-  { step: "01", label: "Frame", body: "Two-week discovery. Audits, interviews, and a written point of view." },
-  { step: "02", label: "Systemize", body: "Foundations and the first 20 screens together. Nothing bespoke that could be systematic." },
-  { step: "03", label: "Shape", body: "High-fidelity, motion, and prototypes we can prove with real users." },
-  { step: "04", label: "Ship", body: "Engineering-ready handoff plus a week of ship support, then a 30-day retro." },
+  { step: "01", label: "Diagnose", body: "We identify what your current website is missing: clarity, structure, design, trust, CTAs, or lead flow." },
+  { step: "02", label: "Plan", body: "We map the website structure, page flow, service sections, and conversion path." },
+  { step: "03", label: "Write", body: "We create clear website copy that explains your business and moves visitors toward action." },
+  { step: "04", label: "Design", body: "We design a professional website that supports the message and builds trust." },
+  { step: "05", label: "Build", body: "We develop the website across desktop, tablet, and mobile." },
+  { step: "06", label: "Launch", body: "We prepare your CTAs, forms, SEO foundation, and final pages so the site is ready to work." },
 ];
 
 export default function ServicesProcess() {
@@ -33,21 +35,22 @@ export default function ServicesProcess() {
                 data-reveal="icon"
                 className="inline-block h-1.5 w-1.5 bg-accent"
               />
-              Process / 03
+              Our process / 03
             </span>
           </MaskedLine>
 
           <h2 className="text-[clamp(2rem,5vw,4rem)] font-medium leading-[1.02] tracking-[-0.02em] text-foreground">
-            <ScrubText>Four phases,</ScrubText>{" "}
+            <ScrubText>Six phases,</ScrubText>{" "}
             <span className="text-foreground/60">
-              <ScrubText>every engagement.</ScrubText>
+              <ScrubText>every project.</ScrubText>
             </span>{" "}
-            <StencilFill className="text-accent">No mystery.</StencilFill>
+            <StencilFill className="text-accent">Launch with direction.</StencilFill>
           </h2>
 
           <p className="max-w-md text-sm leading-relaxed text-foreground/60">
-            <MaskedLine block>The same four steps whether the engagement is</MaskedLine>
-            <MaskedLine block>a Sprint or a 14-week Systems build.</MaskedLine>
+            <MaskedLine block>Your goal is not just to launch a website —</MaskedLine>
+            <MaskedLine block>it is to launch with direction. That is why</MaskedLine>
+            <MaskedLine block>our work process helps your business win.</MaskedLine>
           </p>
         </div>
 
