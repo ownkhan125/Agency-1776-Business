@@ -95,9 +95,9 @@
   --color-accent: var(--accent);
   --color-surface: var(--surface);
   --color-muted: var(--muted);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-space-grotesk);
   --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-anton-sc);
+  --font-display: var(--font-bebas-neue);
 }
 
 html,
@@ -109,6 +109,12 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  /* Space Grotesk reads best with a hair of tightening at body size —
+     keeps the geometric g/y descenders from feeling airy, without
+     overriding the many explicit `tracking-[...]` values in the tree. */
+  letter-spacing: -0.005em;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Display face for all real headings. Wrapped in @layer base so it
@@ -123,6 +129,17 @@ body {
   h5,
   h6 {
     font-family: var(--font-display), var(--font-sans), Arial, Helvetica, sans-serif;
+    /* Bebas Neue is a condensed uppercase-only display face. It ships
+       tight by default — a touch of positive optical tracking at the
+       base level keeps large hero headings from feeling cramped, while
+       the many explicit `tracking-[-0.02em]` Tailwind overrides on
+       individual headings still win where a tighter feel is wanted. */
+    letter-spacing: 0.005em;
+    /* Baseline line-height. Individual headings still override with
+       `leading-[...]` where a tight display cluster is needed. Bebas
+       Neue has taller caps than Anton SC — a hair more room here
+       prevents ascenders touching descenders in stacked lines. */
+    line-height: 1;
   }
 }
 

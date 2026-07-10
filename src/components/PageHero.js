@@ -71,7 +71,7 @@ export default function PageHero({
       </div>
 
       <div ref={scrubRef} className="max-w-[70rem]">
-        <h1 className="font-display text-[clamp(2.5rem,7.5vw,6.5rem)] leading-[0.94] tracking-[-0.02em] text-foreground [word-break:normal]">
+        <h1 className="font-display text-[clamp(2.5rem,7.5vw,6.5rem)] leading-[0.94] tracking-[-0.01em] text-foreground [word-break:normal]">
           {heading.lead && (
             <span className="block">
               <ScrubText>{heading.lead}</ScrubText>

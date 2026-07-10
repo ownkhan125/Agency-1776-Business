@@ -10,6 +10,7 @@ import { useSectionReveal } from "@/hooks/useSectionReveal";
 import { useScrubReveal } from "@/hooks/useScrubReveal";
 import { gsap, registerGsap } from "@/animations/register";
 import { SNAP } from "@/animations/config";
+import ProjectMock, { MOCK_VARIANT_KEYS } from "@/components/ProjectMock";
 
 /**
  * Selected work / 003 — 3D Fibonacci-sphere gallery.
@@ -480,53 +481,45 @@ export default function Portfolio() {
 /* ---------- Sphere card face ---------- */
 
 function SphereCard({ index, project }) {
+  // Cycle a fixed rotation of mock variants across the 18 sphere slots
+  // so no cluster on the sphere ever repeats a face. The chosen variant
+  // for each slot is deterministic (`index % variants.length`) — sphere
+  // geometry is stable across SSR/CSR, so the mock alignment is too.
+  const variant =
+    MOCK_VARIANT_KEYS[index % MOCK_VARIANT_KEYS.length] || project.mock;
   return (
     <div
-      className="chamfer chamfer-sm relative h-full w-full"
+      className="chamfer chamfer-sm relative h-full w-full overflow-hidden"
       style={{
         "--chamfer-border-color":
           "color-mix(in srgb, var(--muted) 45%, transparent)",
-        "--chamfer-bg": "var(--card-pinstripe), var(--surface)",
+        "--chamfer-bg": "var(--surface)",
       }}
     >
-      {/* Inner chamfered ring — echoes the ServiceCard/Portfolio placeholder
-          treatment used elsewhere on the site. */}
+      {/* SVG mock — fills the card, sits behind the meta overlay. */}
+      <div className="absolute inset-[1px] overflow-hidden">
+        <ProjectMock variant={variant} showCaption={false} />
+      </div>
+
+      {/* Meta overlay — kept legible over the mock via a bottom gradient. */}
       <div
         aria-hidden
-        className="chamfer chamfer-xs pointer-events-none absolute inset-[6px]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5"
         style={{
-          "--chamfer-border-color":
-            "color-mix(in srgb, var(--muted) 35%, transparent)",
-          "--chamfer-bg": "transparent",
+          background:
+            "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.35) 60%, transparent 100%)",
         }}
       />
 
-      <div className="relative z-10 flex h-full flex-col justify-between p-3">
+      <div className="relative z-10 flex h-full flex-col justify-between p-2.5">
         <div className="flex items-start justify-between">
-          <span className="font-mono text-[8px] uppercase tracking-[0.24em] text-foreground/40">
+          <span className="font-mono text-[7px] uppercase tracking-[0.22em] text-foreground/85 [text-shadow:0_1px_2px_rgba(0,0,0,0.8)]">
             {String(index + 1).padStart(2, "0")} / {String(SPHERE_CARD_COUNT).padStart(2, "0")}
           </span>
-          <span className="inline-block h-1 w-1 bg-accent opacity-80" />
+          <span className="inline-block h-1 w-1 bg-accent" />
         </div>
 
-        {/* Abstract "product screen" mock — three horizontal bars of
-            varying widths hinting at UI content. */}
-        <div className="flex flex-1 flex-col items-center justify-center gap-1.5">
-          <span
-            className="block h-[2px] w-2/3 bg-foreground/45"
-            style={{ transform: `translateX(${((index * 3) % 7) - 3}px)` }}
-          />
-          <span
-            className="block h-[2px] w-1/2 bg-foreground/30"
-            style={{ transform: `translateX(${((index * 5) % 9) - 4}px)` }}
-          />
-          <span
-            className="block h-[2px] w-[70%] bg-foreground/35"
-            style={{ transform: `translateX(${((index * 7) % 5) - 2}px)` }}
-          />
-        </div>
-
-        <div className="text-center font-mono text-[8px] uppercase tracking-[0.2em] text-foreground/50">
+        <div className="text-center font-mono text-[7px] uppercase tracking-[0.2em] text-foreground/90 [text-shadow:0_1px_2px_rgba(0,0,0,0.8)]">
           {project.tag}
         </div>
       </div>
@@ -745,4 +738,3 @@ function ProjectCarousel({ projects, count, onOpen }) {
     </div>
   );
 }
-

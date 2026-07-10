@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { gsap, registerGsap } from "@/animations/register";
+import ProjectMock, { MOCK_VARIANT_KEYS } from "@/components/ProjectMock";
 
 /**
  * ProjectModal — click-a-sphere-card → enlarged card + metadata.
@@ -207,45 +208,46 @@ export default function ProjectModal({ open, project, index, onClose }) {
           </svg>
         </button>
 
-        {/* Enlarged "card image" — mirrors the sphere-card face but
-            scaled up so a click feels like the card zoomed in. Two
-            chamfered rings echo the tri-plane treatment used on the
-            sphere card and keyboard keycaps. */}
+        {/* Enlarged mock — mirrors the sphere-card face but scaled up
+            so a click feels like the card zoomed in. Same ProjectMock
+            SVG the sphere renders, at a hero read size. Variant is
+            derived from index the same way the sphere derives it, so
+            the modal always shows the card the user clicked. */}
         <div
-          className="chamfer chamfer-md relative mx-5 mt-14 aspect-[4/3] shrink-0 md:mx-8 md:mt-16"
+          className="chamfer chamfer-md relative mx-5 mt-14 aspect-[4/3] shrink-0 overflow-hidden md:mx-8 md:mt-16"
           style={{
             "--chamfer-border-color":
               "color-mix(in srgb, var(--muted) 40%, transparent)",
-            "--chamfer-bg":
-              "var(--card-pinstripe), linear-gradient(to bottom, color-mix(in srgb, var(--surface) 96%, black), color-mix(in srgb, var(--surface) 82%, black))",
+            "--chamfer-bg": "var(--surface)",
           }}
         >
+          <div className="absolute inset-[1px] overflow-hidden">
+            <ProjectMock
+              variant={
+                MOCK_VARIANT_KEYS[index % MOCK_VARIANT_KEYS.length] ||
+                project.mock ||
+                "northwind"
+              }
+              showCaption={false}
+            />
+          </div>
           <div
             aria-hidden
-            className="chamfer chamfer-sm pointer-events-none absolute inset-3"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5"
             style={{
-              "--chamfer-border-color":
-                "color-mix(in srgb, var(--muted) 32%, transparent)",
-              "--chamfer-bg": "transparent",
+              background:
+                "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.35) 60%, transparent 100%)",
             }}
           />
-          <div className="relative z-10 flex h-full flex-col justify-between p-5 md:p-8">
+          <div className="relative z-10 flex h-full flex-col justify-between p-4 md:p-6">
             <div className="flex items-start justify-between">
-              <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-foreground/60 md:text-xs">
+              <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-foreground/85 [text-shadow:0_1px_2px_rgba(0,0,0,0.9)] md:text-xs">
                 {String(index + 1).padStart(2, "0")} / 18
               </span>
               <span className="inline-block h-1.5 w-1.5 bg-accent" />
             </div>
 
-            {/* Enlarged "product screen" schematic — same three bars,
-                scaled and staggered for a hero read. */}
-            <div className="flex flex-1 flex-col items-center justify-center gap-2.5 md:gap-3.5">
-              <span className="block h-1 w-2/3 bg-foreground/55 md:h-[5px]" />
-              <span className="block h-1 w-1/2 bg-foreground/35 md:h-[5px]" />
-              <span className="block h-1 w-[70%] bg-foreground/45 md:h-[5px]" />
-            </div>
-
-            <div className="text-center font-mono text-[10px] uppercase tracking-[0.28em] text-foreground/60 md:text-xs">
+            <div className="text-center font-mono text-[10px] uppercase tracking-[0.28em] text-foreground/95 [text-shadow:0_1px_2px_rgba(0,0,0,0.9)] md:text-xs">
               {project.tag}
             </div>
           </div>

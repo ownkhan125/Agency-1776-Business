@@ -56,7 +56,8 @@
       "Bash(wait)",
       "Bash(curl *)",
       "Bash(cygpath -w /tmp/playwright-test-agency1776.js)",
-      "Bash(cmd //c \"cygpath -w /tmp/playwright-test-agency1776.js\")"
+      "Bash(cmd //c \"cygpath -w /tmp/playwright-test-agency1776.js\")",
+      "Bash(git *)"
     ]
   }
 }

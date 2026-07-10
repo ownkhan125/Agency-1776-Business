@@ -1,23 +1,30 @@
-import { Geist, Geist_Mono, Anton_SC } from "next/font/google";
+import { Bebas_Neue, Space_Grotesk, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import GlobalChrome from "@/components/GlobalChrome";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Body face — Space Grotesk (variable) drives paragraphs, buttons,
+// nav, form fields, and everything that isn't a heading or monospace
+// spec text. Variable font, so no `weight` array needed.
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
+  display: "swap",
 });
 
+// Monospace face for spec labels, LED legends, and hairline metadata.
+// Kept as Geist Mono — no user request to change it.
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
-// Display face for every heading site-wide. `display: 'swap'` renders
-// the fallback immediately then swaps in Anton SC when ready — no
-// FOIT, and next/font self-hosts + preloads so it lands on first paint
+// Display face for every heading site-wide. Bebas Neue is a tall,
+// condensed sans — replaces Anton SC. `display: 'swap'` renders the
+// fallback immediately then swaps in Bebas Neue when ready — no FOIT,
+// and next/font self-hosts + preloads so it lands on first paint
 // under normal conditions.
-const antonSC = Anton_SC({
-  variable: "--font-anton-sc",
+const bebasNeue = Bebas_Neue({
+  variable: "--font-bebas-neue",
   weight: "400",
   subsets: ["latin"],
   display: "swap",
@@ -52,7 +59,7 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       data-theme="black"
-      className={`${geistSans.variable} ${geistMono.variable} ${antonSC.variable} theme-black h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${geistMono.variable} ${bebasNeue.variable} theme-black h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="isolate min-h-full flex flex-col bg-background text-foreground selection:bg-accent selection:text-background">

@@ -7,6 +7,7 @@ export const PROJECTS = [
     year: "2026",
     title: "A trading interface built for calm.",
     tag: "Financial infra",
+    mock: "northwind",
     lede:
       "A ground-up interface for a fixed-income desk that had outgrown its Bloomberg terminals. We shipped a system that felt calmer while showing more.",
     problem:
@@ -30,6 +31,7 @@ export const PROJECTS = [
     year: "2025",
     title: "A patient-first system, expressed in code.",
     tag: "Healthcare",
+    mock: "lumen",
     lede:
       "A cleartype identity and marketing site for a health-tech Series B that needed to read as clinical without reading as cold.",
     problem:
@@ -53,6 +55,7 @@ export const PROJECTS = [
     year: "2025",
     title: "One scroll from problem to conviction.",
     tag: "Creative tooling",
+    mock: "halo",
     lede:
       "A scroll-driven product tour for a creative tools startup — a single page that walked the reader from problem to demo to purchase in ninety seconds.",
     problem:

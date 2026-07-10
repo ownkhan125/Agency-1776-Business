@@ -87,7 +87,7 @@ export default function Hero() {
       */}
       <div className="flex flex-1 flex-col justify-center gap-10 md:gap-12">
         <div ref={scrubRef} className="max-w-[70rem]">
-          <h1 className="font-display text-[clamp(2.5rem,7.5vw,6.75rem)] leading-[0.95] tracking-[-0.02em] text-foreground [word-break:normal]">
+          <h1 className="font-display text-[clamp(2.5rem,7.5vw,6.75rem)] leading-[0.95] tracking-[-0.01em] text-foreground [word-break:normal]">
             <span className="block">
               <ScrubText>Building Websites</ScrubText>
             </span>

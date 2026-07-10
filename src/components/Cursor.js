@@ -31,10 +31,10 @@ import { gsap, registerGsap } from "@/animations/register";
  * media query.
  */
 
-// Every variant now also carries `xOpacity` — the opacity of the X icon
-// used exclusively by the `close` variant (see the new <g ref={xRef}>
-// element in the JSX). Existing variants get `xOpacity: 0`; the `close`
-// variant hides the triangle and shows the X.
+// Each variant carries `xOpacity` (close-X icon) and `eyeOpacity` (view
+// eye icon). Non-icon variants set both to 0. Only ONE glyph is shown
+// per state at any time — the triangle, the X, or the eye — resolved
+// by the three opacity fields below.
 const VARIANTS = {
   default: {
     w: 50,
@@ -44,6 +44,7 @@ const VARIANTS = {
     triScale: 1,
     triOpacity: 1,
     xOpacity: 0,
+    eyeOpacity: 0,
     rectStroke: 1,
     rectFill: 0,
   },
@@ -55,6 +56,7 @@ const VARIANTS = {
     triScale: 1,
     triOpacity: 1,
     xOpacity: 0,
+    eyeOpacity: 0,
     rectStroke: 1,
     rectFill: 0,
   },
@@ -66,6 +68,7 @@ const VARIANTS = {
     triScale: 1.1,
     triOpacity: 1,
     xOpacity: 0,
+    eyeOpacity: 0,
     rectStroke: 1,
     rectFill: 0,
   },
@@ -77,6 +80,7 @@ const VARIANTS = {
     triScale: 1.2,
     triOpacity: 1,
     xOpacity: 0,
+    eyeOpacity: 0,
     rectStroke: 1,
     rectFill: 0,
   },
@@ -88,6 +92,7 @@ const VARIANTS = {
     triScale: 1.3,
     triOpacity: 1,
     xOpacity: 0,
+    eyeOpacity: 0,
     rectStroke: 1,
     rectFill: 0,
   },
@@ -99,6 +104,7 @@ const VARIANTS = {
     triScale: 1,
     triOpacity: 0,
     xOpacity: 0,
+    eyeOpacity: 0,
     rectStroke: 0,
     rectFill: 1,
   },
@@ -113,6 +119,24 @@ const VARIANTS = {
     triScale: 1,
     triOpacity: 0,
     xOpacity: 1,
+    eyeOpacity: 0,
+    rectStroke: 1,
+    rectFill: 0,
+  },
+  // "View project" affordance — used when the pointer is over a
+  // portfolio card that navigates to a case detail page. Frame widens
+  // to the media/card scale, triangle fades out, eye glyph fades in.
+  // Colour stays foreground (not accent) so the eye reads as a neutral
+  // "look inside" signal rather than a call-to-action.
+  view: {
+    w: 118,
+    h: 118,
+    color: "var(--foreground)",
+    triRot: 0,
+    triScale: 1,
+    triOpacity: 0,
+    xOpacity: 0,
+    eyeOpacity: 1,
     rectStroke: 1,
     rectFill: 0,
   },
@@ -134,6 +158,7 @@ export default function Cursor() {
   const rectRef = useRef(null);
   const triRef = useRef(null);
   const xRef = useRef(null);
+  const eyeRef = useRef(null);
   const stateRef = useRef({ variant: "default" });
   const magneticRef = useRef(null);
 
@@ -152,11 +177,13 @@ export default function Cursor() {
     const rect = rectRef.current;
     const tri = triRef.current;
     const xIcon = xRef.current;
-    if (!main || !breath || !rect || !tri || !xIcon) return;
+    const eyeIcon = eyeRef.current;
+    if (!main || !breath || !rect || !tri || !xIcon || !eyeIcon) return;
 
     gsap.set(main, { xPercent: -50, yPercent: -50, opacity: 0 });
     gsap.set(tri, { transformOrigin: "50% 50%" });
     gsap.set(xIcon, { transformOrigin: "50% 50%", opacity: 0 });
+    gsap.set(eyeIcon, { transformOrigin: "50% 50%", opacity: 0, scale: 0.85 });
     gsap.set(breath, { transformOrigin: "50% 50%", scale: 1 });
 
     // Position lerp
@@ -297,6 +324,14 @@ export default function Cursor() {
         ease: "power3.out",
         overwrite: "auto",
       });
+      gsap.to(eyeIcon, {
+        opacity: v.eyeOpacity,
+        // Same subtle scale pop as the X — reads as a lens focusing in.
+        scale: v.eyeOpacity > 0 ? 1 : 0.85,
+        duration: 0.4,
+        ease: "power3.out",
+        overwrite: "auto",
+      });
       gsap.to(rect, {
         fillOpacity: v.rectFill,
         strokeOpacity: v.rectStroke,
@@ -383,6 +418,8 @@ export default function Cursor() {
       gsap.killTweensOf(breath);
       gsap.killTweensOf(rect);
       gsap.killTweensOf(tri);
+      gsap.killTweensOf(xIcon);
+      gsap.killTweensOf(eyeIcon);
     };
   }, []);
 
@@ -496,6 +533,31 @@ export default function Cursor() {
               stroke="currentColor"
               strokeWidth="1"
               strokeLinecap="square"
+              vectorEffect="non-scaling-stroke"
+            />
+          </g>
+          {/*
+            Eye — "view this project" icon. Hidden by default (opacity 0)
+            and faded in only when the `view` variant is active. Almond
+            outline + centred pupil, drawn as two symmetric quadratic
+            curves so the glyph reads at the ~2.4× scale the view
+            variant renders at. Same 32x32 origin as the triangle + X so
+            all three icons swap without a positional shift.
+          */}
+          <g ref={eyeRef}>
+            <path
+              d="M8 16 Q 16 9 24 16 Q 16 23 8 16 Z"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeLinejoin="round"
+              vectorEffect="non-scaling-stroke"
+            />
+            <circle
+              cx="16"
+              cy="16"
+              r="2.5"
+              fill="currentColor"
               vectorEffect="non-scaling-stroke"
             />
           </g>
