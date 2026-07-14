@@ -57,7 +57,9 @@
       "Bash(curl *)",
       "Bash(cygpath -w /tmp/playwright-test-agency1776.js)",
       "Bash(cmd //c \"cygpath -w /tmp/playwright-test-agency1776.js\")",
-      "Bash(git *)"
+      "Bash(git *)",
+      "Bash(npx --no-install playwright --version)",
+      "Bash(TARGET_URL=http://localhost:3001 node run.js \"C:\\\\Users\\\\General\\\\AppData\\\\Local\\\\Temp\\\\playwright-test-topbar.js\")"
     ]
   }
 }
