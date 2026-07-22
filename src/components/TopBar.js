@@ -5,9 +5,9 @@ import { gsap, registerGsap } from "@/animations/register";
 import { cn } from "@/utils/cn";
 
 const TABS = [
-  { id: "business",    label: "Business",                 active: true,  href: null },
-  { id: "politicians", label: "Politicians or Candidates", active: false, href: null },
-  { id: "nonprofit",   label: "Nonprofit",                active: false, href: null },
+  { id: "business",    label: "Business",                 active: true,  href: "https://agency-1776-business.vercel.app/" },
+  { id: "politicians", label: "Politicians or Candidates", active: false, href: "https://agency-1776-politicians-or-candidat.vercel.app/" },
+  { id: "nonprofit",   label: "Nonprofit",                active: false, href: "https://agency-1776-nonprofit.vercel.app/" },
 ];
 
 // Top Bar palette is intentionally frozen to the dark-theme values and
@@ -85,11 +85,11 @@ function TopBarTab({ tab }) {
       role={tab.href ? undefined : "presentation"}
       className={cn(
         "relative inline-flex select-none items-center whitespace-nowrap px-3 py-2 text-[10px] uppercase tracking-[0.28em] transition-opacity md:px-5 md:text-[11px]",
-        isActive ? "text-accent" : "cursor-not-allowed",
-        tab.href ? "cursor-pointer" : ""
+        isActive ? "text-accent" : "",
+        tab.href ? "cursor-pointer" : "cursor-not-allowed"
       )}
       style={isActive ? undefined : { color: TOPBAR_FG_45 }}
-      title={isActive ? undefined : "Coming soon"}
+      title={!isActive && !tab.href ? "Coming soon" : undefined}
     >
       {isActive && (
         <span
